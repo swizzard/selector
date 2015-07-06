@@ -49,10 +49,10 @@ returns `{'hangup': True}`
     ... timeout=30), 'swizzarddotpizza')
     >>> for label, result in labeled_sel.iteritems():
     ...     print label, result['text']
-   #python I love #python it is such a cool language
-   #python I am also a fake person on twitter who loves #python
-   swizzarddotpizza I have never visited https://swizzard.pizza
-   ...
+    #python I love \#python it is such a cool language
+    #python I am also a fake person on twitter who loves #python
+    swizzarddotpizza I have never visited https://swizzard.pizza
+    ...
 
 Selectors are initialized with a `stop_condition` and a `pause_condition`,
 which, if omitted at init, defaults to `Selector.false`, which just returns
