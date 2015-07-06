@@ -73,39 +73,39 @@ the effect is that of a combination between `itertools.chain` and
   these functions are called _per value_, so any internal state will have to
   be snuck in:
 
-        # with a global var...
-        seen = set()
-        def stop_on_seen(val):
-            if val in seen:
-                return True
-            else:
-                seen.add(val)
-                return False
-        sel = Selector(stop_on_seen, ...)
-        # ...or a callable object...
-        class Seen(object):
-            def __init__(self):
-                self.seen = set()
-            def __call__(self, val):
-                if val in self.seen:
-                    return True
-                else:
-                    self.seen.add(val)
-                    return False
-        sel = Selector(Seen(), ...)
-        # ...or by subclassing
-        class SeenSelector(Selector):
-            def __init__(self, pause_condition=None, gens=None):
-                self.seen = set()
-                super(SeenSelector, self).__init__(self.stop_on_seen,
-                                                pause_condition, gens)
-            def stop_on_seen(self, val):
-                if val in self.seen:
-                    return True
-                else:
-                    self.seen.append(val)
-                    return False
-        sel = SeenSelector(...)
+      # with a global var...
+      seen = set()
+      def stop_on_seen(val):
+          if val in seen:
+              return True
+          else:
+              seen.add(val)
+              return False
+      sel = Selector(stop_on_seen, ...)
+      # ...or a callable object...
+      class Seen(object):
+          def __init__(self):
+              self.seen = set()
+          def __call__(self, val):
+              if val in self.seen:
+                  return True
+              else:
+                  self.seen.add(val)
+                  return False
+      sel = Selector(Seen(), ...)
+      # ...or by subclassing
+      class SeenSelector(Selector):
+          def __init__(self, pause_condition=None, gens=None):
+              self.seen = set()
+              super(SeenSelector, self).__init__(self.stop_on_seen,
+                                                 pause_condition, gens)
+          def stop_on_seen(self, val):
+              if val in self.seen:
+                  return True
+              else:
+                  self.seen.append(val)
+                  return False
+      sel = SeenSelector(...)
 
 * Similarly, `pause_condition` and `start_condition` can only be _one_
   function. Multiple conditions require either custom functions or a DIY
