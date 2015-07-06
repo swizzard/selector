@@ -49,10 +49,10 @@ returns `{'hangup': True}`
     ... timeout=30), 'swizzarddotpizza')
     >>> for label, result in labeled_sel.iteritems():
     ...     print label, result['text']
-   #python I love #python it is such a cool language
-   #python I am also a fake person on twitter who loves #python
-   swizzarddotpizza I have never visited https://swizzard.pizza
-   ...
+    #python I love #python it is such a cool language
+    #python I am also a fake person on twitter who loves #python
+    swizzarddotpizza I have never visited https://swizzard.pizza
+    ...
 
 Selectors are initialized with a `stop_condition` and a `pause_condition`,
 which, if omitted at init, defaults to `Selector.false`, which just returns
@@ -65,7 +65,7 @@ every value in the generator. A selector with `Selector.false` as both its stop
 and pause conditions is functionally equivalent to [`itertools.chain`](https://docs.python.org/2/library/itertools.html#itertools.chain),
 although likely orders of magnitude slower. With a non-trivial pause condition,
 the effect is that of a combination between `itertools.chain` and
-[`itertools.ifilter`](https://docs.python.org/2/library/itertools.html#itertools.ifilterfalse).)
+[`itertools.ifilterfalse`](https://docs.python.org/2/library/itertools.html#itertools.ifilterfalse).)
 
 ###Other notes
 * functions used as stop and pause conditions should be what might be called
@@ -73,39 +73,39 @@ the effect is that of a combination between `itertools.chain` and
   these functions are called _per value_, so any internal state will have to
   be snuck in:
 
-    # with a global var...
-    seen = set()
-    def stop_on_seen(val):
-        if val in seen:
-            return True
-        else:
-            seen.add(val)
-            return False
-    sel = Selector(stop_on_seen, ...)
-    # ...or a callable object...
-    class Seen(object):
-        def __init__(self):
-            self.seen = set()
-        def __call__(self, val):
-            if val in self.seen:
+        # with a global var...
+        seen = set()
+        def stop_on_seen(val):
+            if val in seen:
                 return True
             else:
-                self.seen.add(val)
+                seen.add(val)
                 return False
-    sel = Selector(Seen(), ...)
-    # ...or by subclassing
-    class SeenSelector(Selector):
-        def __init__(self, pause_condition=None, gens=None):
-            self.seen = set()
-            super(SeenSelector, self).__init__(self.stop_on_seen,
-                                               pause_condition, gens)
-        def stop_on_seen(self, val):
-            if val in self.seen:
-                return True
-            else:
-                self.seen.append(val)
-                return False
-    sel = SeenSelector(...)
+        sel = Selector(stop_on_seen, ...)
+        # ...or a callable object...
+        class Seen(object):
+            def __init__(self):
+                self.seen = set()
+            def __call__(self, val):
+                if val in self.seen:
+                    return True
+                else:
+                    self.seen.add(val)
+                    return False
+        sel = Selector(Seen(), ...)
+        # ...or by subclassing
+        class SeenSelector(Selector):
+            def __init__(self, pause_condition=None, gens=None):
+                self.seen = set()
+                super(SeenSelector, self).__init__(self.stop_on_seen,
+                                                pause_condition, gens)
+            def stop_on_seen(self, val):
+                if val in self.seen:
+                    return True
+                else:
+                    self.seen.append(val)
+                    return False
+        sel = SeenSelector(...)
 
 * Similarly, `pause_condition` and `start_condition` can only be _one_
   function. Multiple conditions require either custom functions or a DIY
@@ -123,14 +123,14 @@ the effect is that of a combination between `itertools.chain` and
   method', so you can define your own class and plug it right in.
 * `LabeledSelector.select_on` takes a label:
 
-    ls = LabeledSelector(...)
-    @ls.select_on('gen1')
-    def gen1():
-        ...
-    # or if you're feeling particularly obtuse
-    def gen2():
-        ...
-    ls.select_on('gen2')(gen2)
+        ls = LabeledSelector(...)
+        @ls.select_on('gen1')
+        def gen1():
+            ...
+        # or if you're feeling particularly obtuse
+        def gen2():
+            ...
+        ls.select_on('gen2')(gen2)
 
 * Both classes' `.select_on` decorators copy the `__name__` attribute of the
   function they wrap, so that they show up as `<function foo at 0x...>` as
